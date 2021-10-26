@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="pjLivrariaSQLite.MainPage">
+
+    <StackLayout>
+        <!-- Place new controls here -->
+        <TableView Intent="Form">
+            <TableRoot>
+            <TableSection Title="Cadastro Livro">
+                <EntryCell x:Name="TxtCodigo"
+                           Label="Código"
+                           Keyboard="Text"
+                           Placeholder="Digite o código do seu livro"
+                         />
+                <EntryCell x:Name="TxtTitulo"
+                           Label="Title"
+                           Keyboard="Text"
+                           Placeholder="Digite o titulo do seu livro"
+                         />
+                    <EntryCell x:Name="TxtAutor"
+                           Label="Autor"
+                           Keyboard="Text"
+                           Placeholder="Digite o autor(a) do seu livro"
+                         />
+                    <EntryCell x:Name="TxtEditora"
+                           Label="Editora"
+                           Keyboard="Text"
+                           Placeholder="Digite a editora do seu livro"
+                         />
+                    <EntryCell x:Name="TxtAno"
+                           Label="Ano"
+                           Keyboard="Numeric"
+                           Placeholder="Digite o ano do seu livro"
+                         />
+                </TableSection>
+            </TableRoot>
+        </TableView>
+        <Button Text="Verificar" Clicked="Button_Clicked" />
+        <Label x:Name="LabelEmail" 
+                       BackgroundColor="Beige" 
+                       FontSize="20"
+                       FontAttributes="Bold" />
+        <Button Text="Apresentar conteúdo" 
+                    Clicked="bt2" Margin="20" Padding="20"
+                    FontAttributes="Bold" FontSize="20" />
+        <Button Text="Verificar" Clicked="Button2_Clicked" />
+    </StackLayout>
+
+</ContentPage>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+
+namespace DtAccess01
+{
+    public partial class MainPage : ContentPage
+    {
+        public MainPage()
+        {
+            InitializeComponent();
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.Properties["Email"] = TxtEmail.Text;
+            Application.Current.Properties["EnviaEmail"] = SwitchEnviaEmail.On;
+            //DisplayAlert("SwitchEnviaEmail", Application.Current.Properties["EnviaEmail"].ToString(), "Ok");
+            // se quiser salvar imediatamente
+            Application.Current.SavePropertiesAsync();
+            if (Application.Current.Properties.ContainsKey("EnviaEmail"))
+            {
+                try
+                {
+                    if ((bool)Application.Current.Properties["EnviaEmail"] == true)
+                    {
+                        if (Application.Current.Properties["Email"].ToString() != "")
+                        {
+                            LabelEmail.Text = Application.Current.Properties["Email"].ToString();
+                        }
+                        else
+                        {
+                            LabelEmail.Text = "Properties Email está vazia";
+                        }
+
+                    }
+                    else
+                    {
+                        LabelEmail.Text = "";
+                    }
+                }
+                catch (Exception erro)
+                {
+                    LabelEmail.Text = "Properties Email Inexistente. \n\nErro:" + erro.ToString();
+                }
+
+            }
+        }
+
+        private void Button2_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new DadosArquivo());
+        }
+
+        private void bt2(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new PageTeste2());
+        }
+    }
+}
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DtAccess01.MainPage">
+
+    <StackLayout>
+        <TableView Intent="Form">
+            <TableRoot>
+                <TableSection Title="Cadastro">
+                    <EntryCell x:Name="TxtEmail"
+                           Label="Email" 
+                           Placeholder="Digite o email" 
+                           Keyboard="Email"/>
+                    <SwitchCell x:Name="SwitchEnviaEmail"
+                            Text="Enviar E-Mail?"
+                            On="True"/>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+        <Button Text="Verificar" Clicked="Button_Clicked" />
+        <Label x:Name="LabelEmail" 
+                       BackgroundColor="Beige" 
+                       FontSize="20"
+                       FontAttributes="Bold" />
+        <Button Text="Apresentar conteúdo" 
+                    Clicked="bt2" Margin="20" Padding="20"
+                    FontAttributes="Bold" FontSize="20" />
+        <Button Text="Verificar" Clicked="Button2_Clicked" />
+    </StackLayout>
+
+</ContentPage>
